@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-贪吃蛇游戏 v1.1.0
-新增：难度递增系统 - 随着分数提高，蛇移动速度加快
+贪吃蛇游戏 v1.2.0
+新增：皮肤系统 - 多种颜色主题可选
 """
 
 import pygame
 import random
 import sys
+import json
+from pathlib import Path
 
 # 初始化 Pygame
 pygame.init()
@@ -18,17 +20,66 @@ WINDOW_HEIGHT = 400
 GRID_SIZE = 20
 GRID_WIDTH = WINDOW_WIDTH // GRID_SIZE
 GRID_HEIGHT = WINDOW_HEIGHT // GRID_SIZE
-BASE_FPS = 10  # 基础速度
-MAX_FPS = 25   # 最高速度
+BASE_FPS = 10
+MAX_FPS = 25
 
-# 颜色定义
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-DARK_GREEN = (0, 200, 0)
-RED = (255, 0, 0)
-GOLD = (255, 215, 0)
-GRAY = (40, 40, 40)
+# 皮肤配置
+SKINS = {
+    'classic': {
+        'name': '经典绿',
+        'snake_head': (0, 200, 0),
+        'snake_body': (0, 255, 0),
+        'food': (255, 0, 0),
+        'golden_food': (255, 215, 0),
+        'bg': (0, 0, 0),
+        'grid': (40, 40, 40)
+    },
+    'blue': {
+        'name': '冰蓝',
+        'snake_head': (0, 100, 255),
+        'snake_body': (0, 200, 255),
+        'food': (255, 100, 100),
+        'golden_food': (255, 255, 100),
+        'bg': (0, 10, 30),
+        'grid': (20, 40, 60)
+    },
+    'purple': {
+        'name': '紫魅',
+        'snake_head': (180, 0, 255),
+        'snake_body': (220, 100, 255),
+        'food': (255, 0, 150),
+        'golden_food': (255, 215, 0),
+        'bg': (20, 0, 40),
+        'grid': (50, 30, 60)
+    },
+    'orange': {
+        'name': '橙热',
+        'snake_head': (255, 100, 0),
+        'snake_body': (255, 180, 0),
+        'food': (0, 255, 100),
+        'golden_food': (255, 255, 255),
+        'bg': (30, 10, 0),
+        'grid': (60, 40, 20)
+    },
+    'matrix': {
+        'name': '黑客帝国',
+        'snake_head': (0, 255, 100),
+        'snake_body': (0, 200, 50),
+        'food': (255, 50, 50),
+        'golden_food': (255, 255, 255),
+        'bg': (0, 20, 0),
+        'grid': (0, 50, 0)
+    },
+    'dark': {
+        'name': '暗黑',
+        'snake_head': (150, 150, 150),
+        'snake_body': (100, 100, 100),
+        'food': (255, 50, 50),
+        'golden_food': (255, 215, 0),
+        'bg': (10, 10, 10),
+        'grid': (30, 30, 30)
+    }
+}
 
 # 方向定义
 UP = (0, -1)
@@ -40,7 +91,8 @@ RIGHT = (1, 0)
 class Snake:
     """蛇类"""
     
-    def __init__(self):
+    def __init__(self, skin='classic'):
+        self.skin = skin
         self.reset()
     
     def reset(self):
@@ -63,7 +115,7 @@ class Snake:
             self.grow = False
     
     def change_direction(self, new_direction):
-        """改变方向（不能直接反向）"""
+        """改变方向"""
         opposite = (-self.direction[0], -self.direction[1])
         if new_direction != opposite:
             self.direction = new_direction
@@ -71,31 +123,27 @@ class Snake:
     def check_collision(self):
         """检测碰撞"""
         head = self.body[0]
-        
-        # 撞墙
         if head[0] < 0 or head[0] >= GRID_WIDTH:
             return True
         if head[1] < 0 or head[1] >= GRID_HEIGHT:
             return True
-        
-        # 撞自己
         if head in self.body[1:]:
             return True
-        
         return False
     
-    def draw(self, screen):
+    def draw(self, screen, skin_name='classic'):
         """绘制蛇"""
+        colors = SKINS.get(skin_name, SKINS['classic'])
+        
         for i, segment in enumerate(self.body):
             x = segment[0] * GRID_SIZE
             y = segment[1] * GRID_SIZE
             
-            # 蛇头颜色深一些
-            color = DARK_GREEN if i == 0 else GREEN
+            color = colors['snake_head'] if i == 0 else colors['snake_body']
             
-            # 绘制圆角矩形效果
+            # 绘制蛇身
             pygame.draw.rect(screen, color, (x+1, y+1, GRID_SIZE-2, GRID_SIZE-2))
-            pygame.draw.rect(screen, WHITE, (x, y, GRID_SIZE, GRID_SIZE), 1)
+            pygame.draw.rect(screen, (255, 255, 255), (x, y, GRID_SIZE, GRID_SIZE), 1)
             
             # 蛇头画眼睛
             if i == 0:
@@ -109,23 +157,23 @@ class Snake:
                 elif self.direction == UP:
                     eye1 = (x + 5, y + 4)
                     eye2 = (x + GRID_SIZE - 8, y + 4)
-                else:  # DOWN
+                else:
                     eye1 = (x + 5, y + GRID_SIZE - 7)
                     eye2 = (x + GRID_SIZE - 8, y + GRID_SIZE - 7)
                 
-                pygame.draw.circle(screen, WHITE, eye1, eye_size)
-                pygame.draw.circle(screen, WHITE, eye2, eye_size)
+                pygame.draw.circle(screen, (255, 255, 255), eye1, eye_size)
+                pygame.draw.circle(screen, (255, 255, 255), eye2, eye_size)
 
 
 class Food:
     """食物类"""
     
-    def __init__(self, snake_body):
-        self.position = self.spawn(snake_body)
-        self.type = 'normal'  # normal, golden
+    def __init__(self, snake_body, skin='classic'):
+        self.skin = skin
+        self.spawn(snake_body)
     
     def spawn(self, snake_body, food_type='normal'):
-        """在随机位置生成食物"""
+        """生成食物"""
         while True:
             x = random.randint(0, GRID_WIDTH - 1)
             y = random.randint(0, GRID_HEIGHT - 1)
@@ -134,21 +182,18 @@ class Food:
                 self.type = food_type
                 return (x, y)
     
-    def draw(self, screen):
+    def draw(self, screen, skin_name='classic'):
         """绘制食物"""
+        colors = SKINS.get(skin_name, SKINS['classic'])
         x = self.position[0] * GRID_SIZE
         y = self.position[1] * GRID_SIZE
         
-        if self.type == 'golden':
-            color = GOLD
-        else:
-            color = RED
+        color = colors['golden_food'] if self.type == 'golden' else colors['food']
         
-        # 绘制圆形食物
         center = (x + GRID_SIZE // 2, y + GRID_SIZE // 2)
         radius = GRID_SIZE // 2 - 2
         pygame.draw.circle(screen, color, center, radius)
-        pygame.draw.circle(screen, WHITE, center, radius, 1)
+        pygame.draw.circle(screen, (255, 255, 255), center, radius, 1)
 
 
 class Game:
@@ -156,33 +201,63 @@ class Game:
     
     def __init__(self):
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-        pygame.display.set_caption('贪吃蛇 v1.1.0 - 难度递增')
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font(None, 36)
         self.small_font = pygame.font.Font(None, 24)
+        
+        # 加载设置
+        self.settings_file = Path('/home/firefly/snake_game/settings.json')
+        self.load_settings()
+        
         self.reset()
+    
+    def load_settings(self):
+        """加载设置"""
+        if self.settings_file.exists():
+            with open(self.settings_file, 'r') as f:
+                settings = json.load(f)
+                self.current_skin = settings.get('skin', 'classic')
+                self.high_score = settings.get('high_score', 0)
+        else:
+            self.current_skin = 'classic'
+            self.high_score = 0
+    
+    def save_settings(self):
+        """保存设置"""
+        settings = {
+            'skin': self.current_skin,
+            'high_score': self.high_score
+        }
+        with open(self.settings_file, 'w') as f:
+            json.dump(settings, f)
     
     def reset(self):
         """重置游戏"""
-        self.snake = Snake()
-        self.food = Food(self.snake.body)
+        self.snake = Snake(self.current_skin)
+        self.food = Food(self.snake.body, self.current_skin)
         self.score = 0
         self.level = 1
         self.games_played = 0
-        self.high_score = 0
         self.game_over = False
         self.paused = False
         self.current_fps = BASE_FPS
+        self.show_skin_menu = False
     
     def calculate_speed(self):
-        """根据分数计算游戏速度"""
-        # 每 50 分升一级，速度增加
+        """计算速度"""
         new_level = (self.score // 50) + 1
         if new_level > self.level:
             self.level = new_level
-        
-        # 速度随等级提升，最高到 MAX_FPS
         self.current_fps = min(BASE_FPS + (self.level - 1) * 2, MAX_FPS)
+    
+    def change_skin(self, skin_name):
+        """更换皮肤"""
+        if skin_name in SKINS:
+            self.current_skin = skin_name
+            self.save_settings()
+            # 重新创建游戏对象以应用新皮肤
+            self.snake = Snake(self.current_skin)
+            self.food = Food(self.snake.body, self.current_skin)
     
     def handle_events(self):
         """处理事件"""
@@ -192,17 +267,39 @@ class Game:
             
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    return False
+                    if self.show_skin_menu:
+                        self.show_skin_menu = False
+                    else:
+                        return False
                 
-                if self.game_over:
+                if self.show_skin_menu:
+                    # 皮肤选择菜单
+                    skin_keys = list(SKINS.keys())
+                    if event.key == pygame.K_1:
+                        self.change_skin(skin_keys[0])
+                    elif event.key == pygame.K_2:
+                        self.change_skin(skin_keys[1])
+                    elif event.key == pygame.K_3:
+                        self.change_skin(skin_keys[2])
+                    elif event.key == pygame.K_4:
+                        self.change_skin(skin_keys[3])
+                    elif event.key == pygame.K_5:
+                        self.change_skin(skin_keys[4])
+                    elif event.key == pygame.K_6:
+                        self.change_skin(skin_keys[5])
+                    self.show_skin_menu = False
+                elif self.game_over:
                     if event.key == pygame.K_SPACE:
                         self.games_played += 1
                         if self.score > self.high_score:
                             self.high_score = self.score
+                            self.save_settings()
                         self.reset()
                 else:
                     if event.key == pygame.K_SPACE:
                         self.paused = not self.paused
+                    elif event.key == pygame.K_m:
+                        self.show_skin_menu = True
                     elif event.key in (pygame.K_UP, pygame.K_w):
                         self.snake.change_direction(UP)
                     elif event.key in (pygame.K_DOWN, pygame.K_s):
@@ -216,109 +313,139 @@ class Game:
     
     def update(self):
         """更新游戏状态"""
-        if self.game_over or self.paused:
+        if self.game_over or self.paused or self.show_skin_menu:
             return
         
         self.snake.move()
         
-        # 检测吃食物
         if self.snake.body[0] == self.food.position:
             self.snake.grow = True
             points = 20 if self.food.type == 'golden' else 10
             self.score += points
-            
-            # 10% 概率生成金色食物（双倍分数）
             food_type = 'golden' if random.random() < 0.1 else 'normal'
-            self.food = Food(self.snake.body, food_type)
-            
-            # 计算新速度
+            self.food = Food(self.snake.body, self.current_skin, )
             self.calculate_speed()
         
-        # 检测碰撞
         if self.snake.check_collision():
             self.game_over = True
     
     def draw(self):
         """绘制游戏画面"""
-        self.screen.fill(BLACK)
+        colors = SKINS.get(self.current_skin, SKINS['classic'])
+        self.screen.fill(colors['bg'])
         
         # 绘制网格
         for x in range(0, WINDOW_WIDTH, GRID_SIZE):
-            pygame.draw.line(self.screen, GRAY, (x, 0), (x, WINDOW_HEIGHT))
+            pygame.draw.line(self.screen, colors['grid'], (x, 0), (x, WINDOW_HEIGHT))
         for y in range(0, WINDOW_HEIGHT, GRID_SIZE):
-            pygame.draw.line(self.screen, GRAY, (0, y), (WINDOW_WIDTH, y))
+            pygame.draw.line(self.screen, colors['grid'], (0, y), (WINDOW_WIDTH, y))
         
         # 绘制游戏对象
-        self.food.draw(self.screen)
-        self.snake.draw(self.screen)
+        self.food.draw(self.screen, self.current_skin)
+        self.snake.draw(self.screen, self.current_skin)
         
-        # 绘制 UI 信息
+        # 绘制 UI
         self.draw_ui()
         
-        # 游戏结束提示
         if self.game_over:
             self.draw_game_over()
         
-        # 暂停提示
         if self.paused and not self.game_over:
             self.draw_pause()
+        
+        if self.show_skin_menu:
+            self.draw_skin_menu()
         
         pygame.display.flip()
     
     def draw_ui(self):
-        """绘制 UI 信息"""
-        # 分数
-        score_text = self.font.render(f'Score: {self.score}', True, WHITE)
+        """绘制 UI"""
+        score_text = self.font.render(f'Score: {self.score}', True, (255, 255, 255))
         self.screen.blit(score_text, (10, 10))
         
-        # 等级
-        level_text = self.small_font.render(f'Level: {self.level}', True, GOLD)
+        level_text = self.small_font.render(f'Level: {self.level}', True, SKINS[self.current_skin]['golden_food'])
         self.screen.blit(level_text, (10, 45))
         
-        # 速度
-        speed_text = self.small_font.render(f'Speed: {self.current_fps} FPS', True, WHITE)
+        speed_text = self.small_font.render(f'Speed: {self.current_fps} FPS', True, (255, 255, 255))
         self.screen.blit(speed_text, (10, 65))
         
-        # 最高分
-        high_score_text = self.small_font.render(f'Best: {self.high_score}', True, WHITE)
+        high_score_text = self.small_font.render(f'Best: {self.high_score}', True, (255, 255, 255))
         self.screen.blit(high_score_text, (WINDOW_WIDTH - 120, 10))
         
-        # 金色食物说明
-        if self.food.type == 'golden':
-            golden_text = self.small_font.render('Golden Food! (+20)', True, GOLD)
-            self.screen.blit(golden_text, (WINDOW_WIDTH - 180, 45))
+        skin_name = SKINS[self.current_skin]['name']
+        skin_text = self.small_font.render(f'Skin: {skin_name}', True, (200, 200, 200))
+        self.screen.blit(skin_text, (WINDOW_WIDTH - 150, 45))
+        
+        hint_text = self.small_font.render('M: Change Skin', True, (150, 150, 150))
+        self.screen.blit(hint_text, (WINDOW_WIDTH - 150, 65))
     
     def draw_game_over(self):
-        """绘制游戏结束界面"""
-        # 半透明背景
+        """绘制游戏结束"""
         overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
         overlay.set_alpha(128)
-        overlay.fill(BLACK)
+        overlay.fill((0, 0, 0))
         self.screen.blit(overlay, (0, 0))
         
-        # 游戏结束文字
-        game_over_text = self.font.render('GAME OVER', True, RED)
+        game_over_text = self.font.render('GAME OVER', True, (255, 0, 0))
         text_rect1 = game_over_text.get_rect(center=(WINDOW_WIDTH//2, WINDOW_HEIGHT//2 - 40))
         self.screen.blit(game_over_text, text_rect1)
         
-        # 分数
-        score_text = self.font.render(f'Final Score: {self.score}', True, WHITE)
+        score_text = self.font.render(f'Final Score: {self.score}', True, (255, 255, 255))
         text_rect2 = score_text.get_rect(center=(WINDOW_WIDTH//2, WINDOW_HEIGHT//2))
         self.screen.blit(score_text, text_rect2)
         
-        # 重新开始提示
-        restart_text = self.small_font.render('Press SPACE to restart', True, WHITE)
+        restart_text = self.small_font.render('Press SPACE to restart', True, (255, 255, 255))
         text_rect3 = restart_text.get_rect(center=(WINDOW_WIDTH//2, WINDOW_HEIGHT//2 + 40))
         self.screen.blit(restart_text, text_rect3)
     
     def draw_pause(self):
-        """绘制暂停界面"""
-        pause_text = self.font.render('PAUSED', True, WHITE)
+        """绘制暂停"""
+        pause_text = self.font.render('PAUSED', True, (255, 255, 255))
         text_rect = pause_text.get_rect(center=(WINDOW_WIDTH//2, WINDOW_HEIGHT//2))
         self.screen.blit(pause_text, text_rect)
     
+    def draw_skin_menu(self):
+        """绘制皮肤选择菜单"""
+        overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+        overlay.set_alpha(200)
+        overlay.fill((0, 0, 0))
+        self.screen.blit(overlay, (0, 0))
+        
+        title_text = self.font.render('Choose Skin (1-6)', True, (255, 255, 255))
+        title_rect = title_text.get_rect(center=(WINDOW_WIDTH//2, 80))
+        self.screen.blit(title_text, title_rect)
+        
+        # 列出所有皮肤
+        y_offset = 130
+        skin_keys = list(SKINS.keys())
+        for i, key in enumerate(skin_keys):
+            skin = SKINS[key]
+            num = i + 1
+            text = f'{num}. {skin["name"]}'
+            
+            # 当前选中的皮肤高亮
+            if key == self.current_skin:
+                text += ' (Current)'
+                color = skin['golden_food']
+            else:
+                color = (255, 255, 255)
+            
+            skin_text = self.small_font.render(text, True, color)
+            text_rect = skin_text.get_rect(center=(WINDOW_WIDTH//2, y_offset))
+            self.screen.blit(skin_text, text_rect)
+            
+            # 显示颜色预览
+            preview_x = WINDOW_WIDTH//2 - 100
+            pygame.draw.rect(self.screen, skin['snake_body'], (preview_x, y_offset - 10, 20, 20))
+            
+            y_offset += 35
+        
+        hint_text = self.small_font.render('Press ESC to cancel', True, (150, 150, 150))
+        hint_rect = hint_text.get_rect(center=(WINDOW_WIDTH//2, y_offset + 20))
+        self.screen.blit(hint_text, hint_rect)
+    
     def run(self):
-        """运行游戏主循环"""
+        """运行游戏"""
         running = True
         while running:
             running = self.handle_events()
@@ -332,15 +459,13 @@ class Game:
 
 def main():
     """主函数"""
-    print("🐍 贪吃蛇游戏 v1.1.0")
-    print("新增功能：难度递增系统")
-    print("控制：方向键或 WASD 移动，空格暂停，ESC 退出")
+    print("🐍 贪吃蛇游戏 v1.2.0")
+    print("新增功能：皮肤系统")
+    print("控制：方向键/WASD 移动，空格暂停，M 换皮肤，ESC 退出")
     print("=" * 50)
-    print("特性：")
-    print("  • 每 50 分升一级，速度提升")
-    print("  • 10% 概率出现金色食物（+20 分）")
-    print("  • 显示当前等级和速度")
-    print("  • 记录最高分")
+    print("可用皮肤:")
+    for key, skin in SKINS.items():
+        print(f"  • {skin['name']} ({key})")
     print("=" * 50)
     
     game = Game()
