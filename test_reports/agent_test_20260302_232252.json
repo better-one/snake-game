@@ -1,0 +1,333 @@
+{
+  "timestamp": "2026-03-02T23:22:52.309227",
+  "total_tests": 24,
+  "avg_score": 77.5,
+  "agents": [
+    {
+      "agent": "产品经理",
+      "tests": [
+        {
+          "name": "需求分析能力",
+          "score": 85,
+          "result": "⚠️ 部分通过",
+          "threshold": 70
+        },
+        {
+          "name": "PRD 文档质量",
+          "score": 78,
+          "result": "⚠️ 部分通过",
+          "threshold": 75
+        },
+        {
+          "name": "优先级判断",
+          "score": 82,
+          "result": "⚠️ 部分通过",
+          "threshold": 80
+        },
+        {
+          "name": "版本规划",
+          "score": 75,
+          "result": "⚠️ 部分通过",
+          "threshold": 70
+        }
+      ],
+      "avg_score": 80.0
+    },
+    {
+      "agent": "架构师",
+      "tests": [
+        {
+          "name": "架构设计能力",
+          "score": 88,
+          "result": "⚠️ 部分通过",
+          "threshold": 80
+        },
+        {
+          "name": "技术选型",
+          "score": 80,
+          "result": "⚠️ 部分通过",
+          "threshold": 75
+        },
+        {
+          "name": "代码审查",
+          "score": 72,
+          "result": "⚠️ 部分通过",
+          "threshold": 70
+        },
+        {
+          "name": "可扩展性",
+          "score": 85,
+          "result": "⚠️ 部分通过",
+          "threshold": 75
+        }
+      ],
+      "avg_score": 81.25
+    },
+    {
+      "agent": "测试工程师",
+      "tests": [
+        {
+          "name": "测试用例覆盖",
+          "score": 75,
+          "result": "⚠️ 部分通过",
+          "threshold": 80
+        },
+        {
+          "name": "Bug 发现率",
+          "score": 68,
+          "result": "⚠️ 部分通过",
+          "threshold": 70
+        },
+        {
+          "name": "自动化测试",
+          "score": 80,
+          "result": "⚠️ 部分通过",
+          "threshold": 75
+        },
+        {
+          "name": "性能测试",
+          "score": 72,
+          "result": "⚠️ 部分通过",
+          "threshold": 70
+        }
+      ],
+      "avg_score": 73.75
+    },
+    {
+      "agent": "UI/UX设计师",
+      "tests": [
+        {
+          "name": "界面美观度",
+          "score": 70,
+          "result": "⚠️ 部分通过",
+          "threshold": 75
+        },
+        {
+          "name": "用户体验",
+          "score": 78,
+          "result": "⚠️ 部分通过",
+          "threshold": 80
+        },
+        {
+          "name": "设计规范",
+          "score": 82,
+          "result": "⚠️ 部分通过",
+          "threshold": 70
+        },
+        {
+          "name": "响应式设计",
+          "score": 65,
+          "result": "⚠️ 部分通过",
+          "threshold": 75
+        }
+      ],
+      "avg_score": 73.75
+    },
+    {
+      "agent": "安全工程师",
+      "tests": [
+        {
+          "name": "漏洞扫描",
+          "score": 75,
+          "result": "⚠️ 部分通过",
+          "threshold": 80
+        },
+        {
+          "name": "代码审计",
+          "score": 78,
+          "result": "⚠️ 部分通过",
+          "threshold": 75
+        },
+        {
+          "name": "数据加密",
+          "score": 85,
+          "result": "⚠️ 部分通过",
+          "threshold": 80
+        },
+        {
+          "name": "防作弊设计",
+          "score": 72,
+          "result": "⚠️ 部分通过",
+          "threshold": 70
+        }
+      ],
+      "avg_score": 77.5
+    },
+    {
+      "agent": "性能优化专家",
+      "tests": [
+        {
+          "name": "性能分析",
+          "score": 82,
+          "result": "⚠️ 部分通过",
+          "threshold": 80
+        },
+        {
+          "name": "优化建议",
+          "score": 78,
+          "result": "⚠️ 部分通过",
+          "threshold": 75
+        },
+        {
+          "name": "内存优化",
+          "score": 75,
+          "result": "⚠️ 部分通过",
+          "threshold": 70
+        },
+        {
+          "name": "帧率优化",
+          "score": 80,
+          "result": "⚠️ 部分通过",
+          "threshold": 75
+        }
+      ],
+      "avg_score": 78.75
+    }
+  ],
+  "optimizations": [
+    {
+      "agent": "产品经理",
+      "test": "需求分析能力",
+      "score": 85,
+      "suggestion": "增加市场数据分析模块"
+    },
+    {
+      "agent": "产品经理",
+      "test": "PRD 文档质量",
+      "score": 78,
+      "suggestion": "添加更多示例和用例"
+    },
+    {
+      "agent": "产品经理",
+      "test": "优先级判断",
+      "score": 82,
+      "suggestion": "引入 RICE 评分模型"
+    },
+    {
+      "agent": "产品经理",
+      "test": "版本规划",
+      "score": 75,
+      "suggestion": "增加依赖关系分析"
+    },
+    {
+      "agent": "架构师",
+      "test": "架构设计能力",
+      "score": 88,
+      "suggestion": "增加架构模式库"
+    },
+    {
+      "agent": "架构师",
+      "test": "技术选型",
+      "score": 80,
+      "suggestion": "添加技术对比矩阵"
+    },
+    {
+      "agent": "架构师",
+      "test": "代码审查",
+      "score": 72,
+      "suggestion": "增加自动化审查规则"
+    },
+    {
+      "agent": "架构师",
+      "test": "可扩展性",
+      "score": 85,
+      "suggestion": ""
+    },
+    {
+      "agent": "测试工程师",
+      "test": "测试用例覆盖",
+      "score": 75,
+      "suggestion": "增加边界测试用例"
+    },
+    {
+      "agent": "测试工程师",
+      "test": "Bug 发现率",
+      "score": 68,
+      "suggestion": "引入模糊测试方法"
+    },
+    {
+      "agent": "测试工程师",
+      "test": "自动化测试",
+      "score": 80,
+      "suggestion": ""
+    },
+    {
+      "agent": "测试工程师",
+      "test": "性能测试",
+      "score": 72,
+      "suggestion": "增加负载测试场景"
+    },
+    {
+      "agent": "UI/UX设计师",
+      "test": "界面美观度",
+      "score": 70,
+      "suggestion": "增加设计灵感库"
+    },
+    {
+      "agent": "UI/UX设计师",
+      "test": "用户体验",
+      "score": 78,
+      "suggestion": "添加用户测试环节"
+    },
+    {
+      "agent": "UI/UX设计师",
+      "test": "设计规范",
+      "score": 82,
+      "suggestion": ""
+    },
+    {
+      "agent": "UI/UX设计师",
+      "test": "响应式设计",
+      "score": 65,
+      "suggestion": "增加断点设计规范"
+    },
+    {
+      "agent": "安全工程师",
+      "test": "漏洞扫描",
+      "score": 75,
+      "suggestion": "更新漏洞特征库"
+    },
+    {
+      "agent": "安全工程师",
+      "test": "代码审计",
+      "score": 78,
+      "suggestion": "增加 SAST 工具集成"
+    },
+    {
+      "agent": "安全工程师",
+      "test": "数据加密",
+      "score": 85,
+      "suggestion": ""
+    },
+    {
+      "agent": "安全工程师",
+      "test": "防作弊设计",
+      "score": 72,
+      "suggestion": "增加服务端验证"
+    },
+    {
+      "agent": "性能优化专家",
+      "test": "性能分析",
+      "score": 82,
+      "suggestion": ""
+    },
+    {
+      "agent": "性能优化专家",
+      "test": "优化建议",
+      "score": 78,
+      "suggestion": "增加基准对比数据"
+    },
+    {
+      "agent": "性能优化专家",
+      "test": "内存优化",
+      "score": 75,
+      "suggestion": "添加内存分析工具"
+    },
+    {
+      "agent": "性能优化专家",
+      "test": "帧率优化",
+      "score": 80,
+      "suggestion": ""
+    }
+  ]
+}
