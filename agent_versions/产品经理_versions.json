@@ -2,13 +2,14 @@
   "agent": "产品经理",
   "current_version": {
     "agent": "产品经理",
-    "version": "v1.1.0",
+    "version": "v1.22.0",
     "changes": [
-      "增加 RICE 评分模型",
-      "添加市场分析模块"
+      "排行榜 2.0",
+      "赛季系统",
+      "奖励机制"
     ],
-    "timestamp": "2026-03-02T23:27:40.385963",
-    "checksum": "274dbf89"
+    "timestamp": "2026-03-02T23:30:01.992043",
+    "checksum": "8ddedbc5"
   },
   "version_history": [
     {
@@ -17,18 +18,63 @@
       "changes": [
         "初始版本"
       ],
-      "timestamp": "2026-03-02T23:27:40.385483",
-      "checksum": "b786bc13"
+      "timestamp": "2026-03-02T23:30:01.968824",
+      "checksum": "451e9477"
     },
     {
       "agent": "产品经理",
-      "version": "v1.1.0",
+      "version": "v1.18.0",
       "changes": [
-        "增加 RICE 评分模型",
-        "添加市场分析模块"
+        "粒子特效系统",
+        "爆炸效果",
+        "收集动画"
       ],
-      "timestamp": "2026-03-02T23:27:40.385963",
-      "checksum": "274dbf89"
+      "timestamp": "2026-03-02T23:30:01.972069",
+      "checksum": "d0779023"
+    },
+    {
+      "agent": "产品经理",
+      "version": "v1.19.0",
+      "changes": [
+        "AI 算法升级",
+        "机器学习",
+        "难度自适应"
+      ],
+      "timestamp": "2026-03-02T23:30:01.976052",
+      "checksum": "1046121a"
+    },
+    {
+      "agent": "产品经理",
+      "version": "v1.20.0",
+      "changes": [
+        "WebSocket 联机",
+        "房间系统",
+        "实时对战"
+      ],
+      "timestamp": "2026-03-02T23:30:01.981741",
+      "checksum": "34344152"
+    },
+    {
+      "agent": "产品经理",
+      "version": "v1.21.0",
+      "changes": [
+        "商城系统",
+        "虚拟货币",
+        "限时皮肤"
+      ],
+      "timestamp": "2026-03-02T23:30:01.986527",
+      "checksum": "76ff734c"
+    },
+    {
+      "agent": "产品经理",
+      "version": "v1.22.0",
+      "changes": [
+        "排行榜 2.0",
+        "赛季系统",
+        "奖励机制"
+      ],
+      "timestamp": "2026-03-02T23:30:01.992043",
+      "checksum": "8ddedbc5"
     }
   ]
 }
